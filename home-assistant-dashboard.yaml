@@ -303,153 +303,6 @@ views:
                   right: sensor.inverter_output_load_on_l2
       - type: grid
         cards:
-          - type: custom:expander-card
-            title: Live Trends
-            title-card:
-              type: heading
-              heading: Live Trends
-              heading_style: title
-              icon: mdi:chart-line
-            expanded: false
-            cards:
-              - type: custom:mini-graph-card
-                name: Solar Power
-                entities:
-                  - entity: sensor.pv_power
-                    color: '#F6DF28'
-                hours_to_show: 24
-                points_per_hour: 4
-                line_width: 2
-                font_size: 75
-                show:
-                  labels: true
-                  points: false
-                  legend: false
-              - type: custom:mini-graph-card
-                name: Grid Load
-                entities:
-                  - entity: sensor.grid_load_on_l1
-                    name: L1
-                    color: '#B62D00'
-                  - entity: sensor.grid_load_on_l2
-                    name: L2
-                    color: '#FF6B35'
-                hours_to_show: 24
-                points_per_hour: 4
-                line_width: 2
-                font_size: 75
-                show:
-                  labels: true
-                  points: false
-                  legend: true
-              - type: custom:mini-graph-card
-                name: Battery SoC
-                entities:
-                  - entity: sensor.shunt_state_of_charge
-                    color: '#3FF628'
-                hours_to_show: 24
-                points_per_hour: 4
-                line_width: 2
-                font_size: 75
-                lower_bound: 0
-                upper_bound: 100
-                show:
-                  labels: true
-                  points: false
-                  legend: false
-              - type: custom:mini-graph-card
-                name: Battery Power
-                entities:
-                  - entity: sensor.battery_power
-                    color: '#3FF628'
-                hours_to_show: 24
-                points_per_hour: 4
-                line_width: 2
-                font_size: 75
-                show:
-                  labels: true
-                  points: false
-                  legend: false
-              - type: custom:mini-graph-card
-                name: AC Consumption
-                entities:
-                  - entity: sensor.ac_consumption_l1
-                    name: L1
-                    color: '#0089b6'
-                  - entity: sensor.ac_consumption_l2
-                    name: L2
-                    color: '#00C2FF'
-                hours_to_show: 24
-                points_per_hour: 4
-                line_width: 2
-                font_size: 75
-                show:
-                  labels: true
-                  points: false
-                  legend: true
-              - type: custom:mini-graph-card
-                name: Grid Voltage
-                entities:
-                  - entity: sensor.grid_voltage_l1
-                    name: L1
-                    color: '#9C27B0'
-                  - entity: sensor.grid_voltage_l2
-                    name: L2
-                    color: '#CE93D8'
-                hours_to_show: 24
-                points_per_hour: 4
-                line_width: 2
-                font_size: 75
-                show:
-                  labels: true
-                  points: false
-                  legend: true
-              - type: custom:apexcharts-card
-                header:
-                  title: Daily Energy Overview
-                  show: true
-                graph_span: 24h
-                span:
-                  start: day
-                chart_type: area
-                series:
-                  - entity: sensor.pv_power
-                    name: Solar
-                    color: '#F6DF28'
-                    type: area
-                    stroke_width: 2
-                    opacity: 0.3
-                    group_by:
-                      func: avg
-                      duration: 15min
-                  - entity: sensor.ac_consumption_l1
-                    name: Consumption L1
-                    color: '#0089b6'
-                    type: area
-                    stroke_width: 2
-                    opacity: 0.2
-                    group_by:
-                      func: avg
-                      duration: 15min
-                  - entity: sensor.ac_consumption_l2
-                    name: Consumption L2
-                    color: '#00C2FF'
-                    type: area
-                    stroke_width: 2
-                    opacity: 0.2
-                    group_by:
-                      func: avg
-                      duration: 15min
-                  - entity: sensor.grid_load_on_l1
-                    name: Grid L1
-                    color: '#B62D00'
-                    type: line
-                    stroke_width: 1
-                    group_by:
-                      func: avg
-                      duration: 15min
-      - type: grid
-        cards:
           - type: heading
             icon: mdi:battery
             heading: Battery
@@ -684,6 +537,107 @@ views:
             features_position: bottom
             vertical: false
             name: Total Discharged
+      - type: grid
+        cards:
+          - type: heading
+            heading: Live Trends
+            heading_style: title
+            icon: mdi:chart-line
+          - type: custom:expander-card
+            expanded: false
+            title-card:
+              type: markdown
+              content: "**Tap to expand charts**"
+            cards:
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.pv_power
+                    name: Solar
+                    color: '#F6DF28'
+                  - entity: sensor.battery_power
+                    name: Battery
+                    color: '#3FF628'
+                name: Solar vs Battery (1h)
+                hours_to_show: 1
+                points_per_hour: 30
+                line_width: 2
+                font_size: 75
+                height: 120
+                show:
+                  labels: true
+                  points: false
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.grid_load_on_l1
+                    name: Grid L1
+                    color: '#B62D00'
+                  - entity: sensor.grid_load_on_l2
+                    name: Grid L2
+                    color: '#FF6B35'
+                name: Grid Load L1/L2 (1h)
+                hours_to_show: 1
+                points_per_hour: 30
+                line_width: 2
+                font_size: 75
+                height: 120
+                show:
+                  labels: true
+                  points: false
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.shunt_state_of_charge
+                    name: SoC
+                    color: '#3FF628'
+                name: Battery SoC (24h)
+                hours_to_show: 24
+                points_per_hour: 6
+                line_width: 2
+                font_size: 75
+                height: 120
+                min: 0
+                max: 100
+                show:
+                  labels: true
+                  points: false
+              - type: custom:apexcharts-card
+                header:
+                  title: Daily Overview
+                  show: true
+                graph_span: 24h
+                span:
+                  start: day
+                apex_config:
+                  chart:
+                    height: 200px
+                  legend:
+                    show: true
+                    position: bottom
+                series:
+                  - entity: sensor.pv_power
+                    name: Solar
+                    type: area
+                    color: '#F6DF28'
+                    opacity: 0.3
+                    stroke_width: 2
+                    group_by:
+                      func: avg
+                      duration: 10min
+                  - entity: sensor.battery_power
+                    name: Battery
+                    type: line
+                    color: '#3FF628'
+                    stroke_width: 2
+                    group_by:
+                      func: avg
+                      duration: 10min
+                  - entity: sensor.ac_consumption_l1
+                    name: Load L1
+                    type: line
+                    color: '#B62D00'
+                    stroke_width: 1
+                    group_by:
+                      func: avg
+                      duration: 10min
     max_columns: 2
     header:
       layout: responsive
