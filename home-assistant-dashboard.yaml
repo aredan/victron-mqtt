@@ -1,0 +1,579 @@
+views:
+  - path: default_view
+    title: Home
+    cards:
+      - square: true
+        type: grid
+        columns: 4
+        cards:
+          - show_state: true
+            show_name: false
+            camera_view: auto
+            type: picture-entity
+            entity: person.ariel
+            aspect_ratio: '1'
+            image: /api/image/serve/5e3f3671f1855327dca0c1853ca88203/512x512
+          - show_state: true
+            show_name: false
+            camera_view: auto
+            type: picture-entity
+            entity: person.angela
+            aspect_ratio: '1'
+            image: /api/image/serve/0ee3cbedf29626bf8abfe3bd0400f124/512x512
+          - show_state: true
+            show_name: false
+            camera_view: auto
+            type: picture-entity
+            entity: person.gabriela_antigua
+            aspect_ratio: '1'
+            name: Gabriela
+            image: /api/image/serve/46590573b6676f626a828c2e3d88fb24/512x512
+          - show_state: true
+            show_name: false
+            camera_view: auto
+            type: picture-entity
+            entity: person.abigail_antigua
+            aspect_ratio: '1'
+            name: Abigail
+            image: /api/image/serve/9b69e2768e49282ec66ac6c4097e0776/512x512
+      - square: true
+        type: grid
+        cards:
+          - square: false
+            type: grid
+            cards:
+              - type: gauge
+                entity: sensor.ccm_alameda_op_temperature
+                name: Temp
+                unit: C
+            columns: 1
+          - type: entity
+            entity: sun.sun
+            state_color: true
+          - show_current: true
+            show_forecast: false
+            type: weather-forecast
+            entity: weather.forecast_home
+            forecast_type: hourly
+      - square: false
+        type: grid
+        cards:
+          - type: custom:button-card
+            name: EDESUR
+            entity: sensor.grid_status
+            icon: mdi:transmission-tower
+            state:
+              - value: UP
+                color: rgb(0, 100, 0)
+              - value: Fault
+                color: rgb(255, 0, 0)
+          - type: custom:button-card
+            name: Solar
+            entity: sensor.victron_mppt_state
+            icon: mdi:solar-power-variant
+            state:
+              - value: External control
+                color: rgb(255, 255, 0)
+              - value: 'Off'
+                color: rgb(169, 169, 169)
+              - value: LIMITED
+                color: rgb(0, 0, 255)
+          - type: custom:button-card
+            name: Office Light
+            entity: light.office_light
+            icon: mdi:lightbulb
+            state:
+              - value: 'ON'
+                color: rgb(255, 255, 0)
+              - value: 'OFF'
+                color: rgb(169, 169, 169)
+          - type: custom:button-card
+            name: MediaRoom Light
+            entity: light.mediaroom_light
+            icon: mdi:lightbulb
+            state:
+              - value: 'ON'
+                color: rgb(255, 255, 0)
+              - value: 'OFF'
+                color: rgb(128, 128, 128)
+    icon: mdi:home
+  - title: ESS
+    icon: mdi:transmission-tower
+    cards: []
+    visible:
+      - user: 57db3acfa47343fe95abb348213cdbc8
+      - user: 3ea71e7f83c2432396822be60af5e7c2
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            icon: mdi:current-ac
+            heading: AC Energy
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.inverter_output_load_on_l1
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.inverter_output_load_on_l2
+          - type: tile
+            entity: sensor.grid_load_on_l1
+            features_position: bottom
+            vertical: false
+            name: Grid In L1
+            color: green
+          - type: tile
+            entity: sensor.grid_load_on_l2
+            features_position: bottom
+            vertical: false
+            name: Grid In L2
+            color: green
+          - type: tile
+            entity: sensor.ac_consumption_l1
+            name: AC Consumption L1
+            color: light-green
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.ac_consumption_l2
+            name: AC Consumption L2
+            color: light-green
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.grid_voltage_l1
+            features_position: bottom
+            vertical: false
+            name: Grid Voltage L1
+          - type: tile
+            entity: sensor.grid_voltage_l2
+            features_position: bottom
+            vertical: false
+            name: Grid Voltage L2
+          - type: tile
+            entity: sensor.grid_current_limit
+            features_position: bottom
+            vertical: false
+            name: Grid limit
+            icon: mdi:car-speed-limiter
+          - type: tile
+            entity: sensor.ess_battery_set_limit
+            features_position: bottom
+            vertical: false
+            name: ESS battery limit
+          - type: tile
+            entity: sensor.grid_energy_from
+            features_position: bottom
+            vertical: false
+            name: Grid Energy In
+          - type: tile
+            entity: sensor.grid_energy_to
+            features_position: bottom
+            vertical: false
+            name: Grid Energy Out
+          - type: tile
+            entity: sensor.grid_frequency_l1
+            features_position: bottom
+            vertical: false
+            name: Grid Freq L1
+          - type: tile
+            entity: sensor.grid_frequency_l2
+            features_position: bottom
+            vertical: false
+            name: Grid Freq L2
+          - square: false
+            type: grid
+            cards:
+              - type: custom:button-card
+                name: Solar
+                entity: sensor.victron_mppt_state
+                icon: mdi:solar-power-variant
+                state:
+                  - value: External control
+                    color: rgb(255, 255, 0)
+                  - value: 'Off'
+                    color: rgb(169, 169, 169)
+                  - value: LIMITED
+                    color: rgb(0, 0, 255)
+                size: 20%
+            grid_options:
+              columns: 4
+              rows: 1
+            columns: 1
+          - square: false
+            type: grid
+            cards:
+              - type: custom:button-card
+                name: Battery
+                entity: sensor.victron_system_battery_state
+                icon: mdi:battery
+                state:
+                  - value: DISCHARGING
+                    color: rgb(255, 0, 0)
+                  - value: CHARGING
+                    color: rgb(0, 100, 0)
+                  - value: IDLE
+                    color: rgb(0, 0, 255)
+                size: 20%
+            grid_options:
+              columns: 4
+              rows: 1
+            columns: 1
+          - square: true
+            type: grid
+            cards:
+              - type: custom:button-card
+                name: EDESUR
+                entity: sensor.grid_status
+                icon: mdi:transmission-tower
+                state:
+                  - value: UP
+                    color: rgb(0, 100, 0)
+                  - value: Fault
+                    color: rgb(255, 0, 0)
+                size: 20%
+            grid_options:
+              columns: 4
+              rows: 1
+            columns: 1
+          - type: tile
+            entity: sensor.ess_state
+            features_position: bottom
+            vertical: false
+            grid_options:
+              columns: 6
+              rows: 1
+          - type: tile
+            entity: sensor.inverter_state
+            features_position: bottom
+            vertical: false
+            grid_options:
+              columns: 6
+              rows: 1
+            icon: mdi:generator-stationary
+            color: green
+          - type: custom:system-flow-card
+            speed: 3
+            fadeIdylElements: true
+            system:
+              unit: W
+              icon: mdi:home-battery-outline
+              extra:
+                main: sensor.inverter_state
+              color: '#0089b6'
+            elements:
+              - value: sensor.grid_load_on_l1
+                icon: mdi:transmission-tower-import
+                position: left
+                color: '#B62D00'
+                extra:
+                  main: sensor.grid_load_on_l2
+                  left: sensor.grid_voltage_l1
+                  right: sensor.grid_voltage_l2
+              - value: sensor.battery_power
+                invert: true
+                icon: mdi:battery
+                extra:
+                  main: sensor.shunt_state_of_charge
+                  left: sensor.battery_voltage
+                  right: sensor.battery_current
+                fill: sensor.shunt_state_of_charge
+                position: left
+                color: '#3FF628'
+              - value: sensor.day_generation
+                icon: mdi:solar-power-variant
+                extra:
+                  main: sensor.pv_power
+                  left: sensor.pv_voltage
+                  right: sensor.pv_current
+                position: top
+                color: '#F6DF28'
+                fill: sensor.day_generation
+              - value: sensor.ac_consumption_l1
+                icon: mdi:power-plug
+                position: right
+                color: '#B62D00'
+                invert: true
+                extra:
+                  main: sensor.ac_consumption_l2
+                  left: sensor.inverter_output_load_on_l1
+                  right: sensor.inverter_output_load_on_l2
+      - type: grid
+        cards:
+          - type: heading
+            icon: mdi:battery
+            heading: Battery
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.shunt_state_of_charge
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.battery_power
+          - type: tile
+            entity: sensor.shunt_state_of_charge
+            features_position: bottom
+            vertical: false
+            name: Shunt SoC
+          - type: tile
+            entity: sensor.weco_state_of_charge
+            features_position: bottom
+            vertical: false
+            name: Weco SoC
+          - type: tile
+            entity: sensor.battery_power
+            features_position: bottom
+            vertical: false
+            name: Battery Power
+            color: green
+          - type: tile
+            entity: sensor.shunt_current
+            features_position: bottom
+            vertical: false
+            name: Shunt Amps
+          - type: tile
+            entity: sensor.battery_current
+            features_position: bottom
+            vertical: false
+            name: Battery Amps
+          - type: tile
+            entity: sensor.battery_state_of_health
+            features_position: bottom
+            vertical: false
+            icon: mdi:medication
+          - type: tile
+            entity: sensor.battery_temperature
+            features_position: bottom
+            vertical: false
+            name: Battery Temp
+          - type: tile
+            entity: sensor.battery_min_cell_temperature
+            features_position: bottom
+            vertical: false
+            name: Cell Temp Min
+          - type: tile
+            entity: sensor.battery_max_cell_temperature
+            features_position: bottom
+            vertical: false
+            name: Cell Temp Max
+          - type: tile
+            entity: sensor.battery_remaining
+            features_position: bottom
+            vertical: false
+            name: Battery Runtime
+          - type: tile
+            entity: sensor.battery_load
+            features_position: bottom
+            vertical: false
+            name: Battery Watts
+          - type: tile
+            entity: sensor.battery_cycles
+            features_position: bottom
+            vertical: false
+            name: Charge Cycles
+          - type: tile
+            entity: sensor.batteries_online
+            features_position: bottom
+            vertical: false
+            name: Batteries Online
+          - type: tile
+            entity: sensor.shunt_voltage
+            features_position: bottom
+            vertical: false
+            name: Shunt Voltage
+          - type: tile
+            entity: sensor.battery_voltage
+            features_position: bottom
+            vertical: false
+            name: Weco Voltage
+          - type: tile
+            entity: sensor.cell_low_voltage
+            features_position: bottom
+            vertical: false
+            name: Cell Low
+          - type: tile
+            entity: sensor.cell_high_voltage
+            features_position: bottom
+            vertical: false
+            name: Cell High
+          - type: tile
+            entity: sensor.dc_system_power
+            features_position: bottom
+            vertical: false
+            name: DC System Power
+      - type: grid
+        cards:
+          - type: heading
+            heading: Solar
+            heading_style: title
+            icon: mdi:solar-power
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: sensor.pv_power
+          - type: tile
+            entity: sensor.victron_mppt_state
+            features_position: bottom
+            vertical: false
+            name: MPPT01 State
+            icon: mdi:solar-power-variant
+            color: accent
+            state_content: state
+          - type: tile
+            entity: sensor.pv_current
+            features_position: bottom
+            vertical: false
+            name: Solar PV Amps
+          - type: tile
+            entity: sensor.pv_voltage
+            features_position: bottom
+            vertical: false
+            name: Solar PV Volt
+          - type: tile
+            entity: sensor.pv_power
+            features_position: bottom
+            vertical: false
+            name: Solar PV Watts
+            color: yellow
+          - type: tile
+            entity: sensor.day_generation
+            features_position: bottom
+            vertical: false
+            name: Generated Today
+            icon: mdi:solar-power
+          - type: tile
+            entity: sensor.yesterday_generation
+            features_position: bottom
+            vertical: false
+            name: Generated Yesterday
+            icon: mdi:calendar-arrow-left
+      - type: grid
+        cards:
+          - type: heading
+            heading: Alarms
+            heading_style: title
+            icon: mdi:alert
+          - type: tile
+            entity: sensor.alarm_low_battery
+            features_position: bottom
+            vertical: false
+            name: Low Battery
+            color: red
+          - type: tile
+            entity: sensor.alarm_high_voltage
+            features_position: bottom
+            vertical: false
+            name: High Voltage
+            color: red
+          - type: tile
+            entity: sensor.alarm_overload
+            features_position: bottom
+            vertical: false
+            name: Overload
+            color: red
+          - type: tile
+            entity: sensor.alarm_high_temperature
+            features_position: bottom
+            vertical: false
+            name: High Temp
+            color: red
+      - type: grid
+        cards:
+          - type: heading
+            heading: System Info
+            heading_style: title
+            icon: mdi:information
+          - type: tile
+            entity: sensor.ve_bus_state
+            features_position: bottom
+            vertical: false
+            name: VE.Bus State
+          - type: tile
+            entity: sensor.victron_firmware_version
+            features_position: bottom
+            vertical: false
+            name: Firmware
+          - type: tile
+            entity: sensor.battery_chargedhistory
+            features_position: bottom
+            vertical: false
+            name: Total Charged
+          - type: tile
+            entity: sensor.battery_dischargedhistory
+            features_position: bottom
+            vertical: false
+            name: Total Discharged
+    max_columns: 2
+    header:
+      layout: responsive
+      badges_position: bottom
+  - title: lights
+    icon: mdi:lightbulb
+    cards: []
+    type: sections
+    sections:
+      - type: grid
+        cards:
+          - square: true
+            type: grid
+            cards:
+              - type: light
+                entity: light.office_light
+                name: Office
+              - type: light
+                entity: light.mediaroom_light
+                name: Media Room
+            columns: 3
+  - title: media
+    path: media
+    icon: mdi:television
+    cards:
+      - square: false
+        type: grid
+        cards:
+          - square: false
+            type: grid
+            cards:
+              - type: entity
+                entity: remote.living_room
+                name: Remote
+              - square: true
+                type: grid
+                cards:
+                  - type: media-control
+                    entity: media_player.au709055
+                  - type: media-control
+                    entity: media_player.tv_de_la_habitacion
+                  - type: media-control
+                    entity: media_player.living_room
+                columns: 3
+              - type: media-control
+                entity: media_player.plex_plex_for_ios_ipad
+              - type: media-control
+                entity: media_player.tv_de_la_habitacion
+              - type: media-control
+                entity: media_player.living_room
+            columns: 1
+        columns: 1
+      - type: entity
+        entity: update.plex_media_server_plexserver
+  - type: masonry
+    path: nvr
+    title: NVR
+    icon: mdi:bird
+    cards:
+      - type: custom:advanced-camera-card
+        cameras:
+          - camera_entity: camera.techo_a
+        view:
+          default: live
+          dim: true
+

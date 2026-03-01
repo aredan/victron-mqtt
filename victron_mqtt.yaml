@@ -1,0 +1,543 @@
+mqtt:
+  sensor:
+  # --- Solar Charger (MPPT) ---
+    - name: "Victron MPPT State"
+      unique_id: "solar_charger_state"
+      state_topic: "victron/N/c0619ab4fedf/solarcharger/0/State"
+      value_template: >
+        {% if value_json.value == 0 %}
+          Off
+        {% elif value_json.value == 2 %}
+          Fault
+        {% elif value_json.value == 3 %}
+          Bulk
+        {% elif value_json.value == 4 %}
+          Absorption
+        {% elif value_json.value == 5 %}
+          Float
+        {% elif value_json.value == 6 %}
+          Storage
+        {% elif value_json.value == 7 %}
+          Equalize
+        {% elif value_json.value == 252 %}
+          External control
+        {% else %}
+          Error - No Data
+        {% endif %}
+
+    - name: "PV Voltage"
+      unique_id: "pv_array_voltage"
+      state_topic: "victron/N/c0619ab4fedf/solarcharger/0/Pv/V"
+      unit_of_measurement: "V"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:flash"
+
+    - name: "PV Power"
+      unique_id: "pv_array_power"
+      state_topic: "victron/N/c0619ab4fedf/solarcharger/0/Yield/Power"
+      unit_of_measurement: "W"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:power-plug"
+
+    - name: "PV Current"
+      unique_id: "pv_array_current"
+      state_topic: "victron/N/c0619ab4fedf/solarcharger/0/Dc/0/Current"
+      unit_of_measurement: "A"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:current-dc"
+
+    - name: "Day Generation"
+      unique_id: "pv_day_generation"
+      state_topic: "victron/N/c0619ab4fedf/solarcharger/0/History/Daily/0/Yield"
+      unit_of_measurement: "kWh"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:calendar-today"
+      device_class: "energy"
+      state_class: "total_increasing"
+
+    - name: "Yesterday Generation"
+      unique_id: "pv_yesterday_generation"
+      state_topic: "victron/N/c0619ab4fedf/solarcharger/0/History/Daily/1/Yield"
+      unit_of_measurement: "kWh"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:calendar-arrow-left"
+      device_class: "energy"
+      state_class: "total_increasing"
+
+  # --- Battery (Shunt / 288) ---
+    - name: "Shunt State of Charge"
+      unique_id: "shunt_soc"
+      state_topic: "victron/N/c0619ab4fedf/battery/288/Soc"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:battery"
+
+    - name: "Shunt Current"
+      unique_id: "shunt_current"
+      state_topic: "victron/N/c0619ab4fedf/battery/288/Dc/0/Current"
+      unit_of_measurement: "A"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:current-dc"
+
+    - name: "Shunt Voltage"
+      unique_id: "shunt_voltage"
+      state_topic: "victron/N/c0619ab4fedf/battery/288/Dc/0/Voltage"
+      unit_of_measurement: "V"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:vector-line"
+
+  # --- Battery (Weco / 512) ---
+    - name: "Weco State of Charge"
+      unique_id: "weco_soc"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/Soc"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:battery"
+
+    - name: "Battery Current"
+      unique_id: "weco_current"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/Dc/0/Current"
+      unit_of_measurement: "A"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:current-dc"
+
+    - name: "Battery Voltage"
+      unique_id: "weco_voltage"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/Dc/0/Voltage"
+      unit_of_measurement: "V"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:flash"
+
+    - name: "Battery Temperature"
+      unique_id: "weco_temperature"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/Dc/0/Temperature"
+      unit_of_measurement: "°C"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:thermometer"
+
+    - name: "Battery State of Health"
+      unique_id: "weco_soh"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/Soh"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:heart-pulse"
+
+    - name: "Battery Cycles"
+      unique_id: "battery_cycles"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/History/ChargeCycles"
+      value_template: "{{ value_json.value | int }}"
+      icon: "mdi:battery-sync"
+
+    - name: "Battery Min Cell Temperature"
+      unique_id: "battery_min_cell_temp"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/System/MinCellTemperature"
+      unit_of_measurement: "°C"
+      value_template: "{{ value_json.value | float | round(1) }}"
+      icon: "mdi:thermometer-chevron-down"
+
+    - name: "Battery Max Cell Temperature"
+      unique_id: "battery_max_cell_temp"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/System/MaxCellTemperature"
+      unit_of_measurement: "°C"
+      value_template: "{{ value_json.value | float | round(1) }}"
+      icon: "mdi:thermometer-chevron-up"
+
+    - name: "Batteries Online"
+      unique_id: "batteries_online"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/System/NrOfModulesOnline"
+      value_template: "{{ value_json.value | int }}"
+      icon: "mdi:battery-multiple"
+
+    - name: "Cell Low Voltage"
+      unique_id: "weco_cell_low_voltage"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/System/MinCellVoltage"
+      unit_of_measurement: "V"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:chevron-double-down"
+
+    - name: "Cell High Voltage"
+      unique_id: "weco_cell_high_voltage"
+      state_topic: "victron/N/c0619ab4fedf/battery/512/System/MaxCellVoltage"
+      unit_of_measurement: "V"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:chevron-double-up"
+
+    - name: "Victron System Battery State"
+      unique_id: "victron_system_battery_state"
+      state_topic: "victron/N/c0619ab4fedf/system/0/Dc/Battery/State"
+      value_template: >
+        {% if value_json.value == 0 %}
+          IDLE
+        {% elif value_json.value == 1 %}
+          CHARGING
+        {% elif value_json.value == 2 %}
+          DISCHARGING
+        {% else %}
+          Unknown
+        {% endif %}
+      icon: "mdi:battery"
+
+    # Net load going in/out of your battery
+    - name: "Battery Load"
+      unique_id: "battery_load"
+      device_class: power
+      state_topic: "victron/N/c0619ab4fedf/system/0/Batteries"
+      value_template: '{{ value_json.value[0].power|float(0)|round(0) }}'
+      unit_of_measurement: "W"
+
+  # --- Battery System Level ---
+    - name: "Battery Power"
+      unique_id: "battery_power_system"
+      state_topic: "victron/N/c0619ab4fedf/system/0/Dc/Battery/Power"
+      unit_of_measurement: "W"
+      device_class: power
+      value_template: "{{ value_json.value | float | round(0) }}"
+      icon: "mdi:battery-charging"
+
+    - name: "DC System Power"
+      unique_id: "dc_system_power"
+      state_topic: "victron/N/c0619ab4fedf/system/0/Dc/System/Power"
+      unit_of_measurement: "W"
+      device_class: power
+      value_template: "{{ value_json.value | float(0) | round(0) }}"
+      icon: "mdi:lightning-bolt"
+
+  # --- Inverter / Grid ---
+    - name: "Grid Load on L1"
+      unique_id: "grid_load_l1"
+      state_topic: "victron/N/c0619ab4fedf/system/0/Ac/Grid/L1/Power"
+      unit_of_measurement: "W"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:transmission-tower"
+
+    - name: "Grid Load on L2"
+      unique_id: "grid_load_l2"
+      state_topic: "victron/N/c0619ab4fedf/system/0/Ac/Grid/L2/Power"
+      unit_of_measurement: "W"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:transmission-tower"
+
+    - name: "Grid Voltage L1"
+      unique_id: "grid_voltage_l1"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/L1/V"
+      unit_of_measurement: "V"
+      value_template: "{{ value_json.value | float | round(1) }}"
+      icon: "mdi:flash"
+
+    - name: "Grid Voltage L2"
+      unique_id: "grid_voltage_l2"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/L2/V"
+      unit_of_measurement: "V"
+      value_template: "{{ value_json.value | float | round(1) }}"
+      icon: "mdi:flash"
+
+    - name: "AC Consumption L1"
+      unique_id: "ac_consumption_l1"
+      state_topic: "victron/N/c0619ab4fedf/system/0/Ac/Consumption/L1/Power"
+      unit_of_measurement: "W"
+      device_class: power
+      value_template: "{{ value_json.value | float(0) | round(0) }}"
+      icon: "mdi:home-lightning-bolt"
+
+    - name: "AC Consumption L2"
+      unique_id: "ac_consumption_l2"
+      state_topic: "victron/N/c0619ab4fedf/system/0/Ac/Consumption/L2/Power"
+      unit_of_measurement: "W"
+      device_class: power
+      value_template: "{{ value_json.value | float(0) | round(0) }}"
+      icon: "mdi:home-lightning-bolt"
+
+    - name: "Grid Energy From"
+      unique_id: "grid_energy_from"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Energy/AcIn1ToInverter"
+      unit_of_measurement: "kWh"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      device_class: "energy"
+      state_class: "total_increasing"
+      icon: "mdi:transmission-tower-import"
+
+    - name: "Grid Energy To"
+      unique_id: "grid_energy_to"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Energy/InverterToAcIn1"
+      unit_of_measurement: "kWh"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      device_class: "energy"
+      state_class: "total_increasing"
+      icon: "mdi:transmission-tower-export"
+
+    - name: "Inverter Output Load on L1"
+      unique_id: "inverter_output_l1"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/Out/L1/P"
+      unit_of_measurement: "W"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:power-plug"
+
+    - name: "Inverter Output Load on L2"
+      unique_id: "inverter_output_l2"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/Out/L2/P"
+      unit_of_measurement: "W"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:power-plug"
+
+    - name: "ESS Battery Set Limit"
+      unique_id: "ess_battery_set_limit"
+      state_topic: "victron/N/c0619ab4fedf/system/0/Control/ActiveSocLimit"
+      unit_of_measurement: "%"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:tune-vertical"
+
+    - name: "Grid Current Limit"
+      unique_id: "grid_current_limit"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/CurrentLimit"
+      unit_of_measurement: "A"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:speedometer"
+
+    - name: "Grid Frequency L1"
+      unique_id: "grid_frequency_l1"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/L1/F"
+      unit_of_measurement: "Hz"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:omega"
+
+    - name: "Grid Frequency L2"
+      unique_id: "grid_frequency_l2"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/L2/F"
+      unit_of_measurement: "Hz"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      icon: "mdi:omega"
+
+  # --- Grid Status ---
+    - name: "Grid Status"
+      unique_id: "grid_status"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Alarms/GridLost"
+      value_template: >
+        {% if value_json.value == 0 %}
+          UP
+        {% elif value_json.value == 1 %}
+          DOWN
+        {% elif value_json.value == 2 %}
+          Fault
+        {% else %}
+          Error - No Data
+        {% endif %}
+
+  # --- Inverter / ESS State ---
+    - name: "Inverter State"
+      unique_id: "inverter_state"
+      state_topic: "victron/N/c0619ab4fedf/system/0/SystemState/State"
+      value_template: >
+        {% if value_json.value == 0 %}
+          Off
+        {% elif value_json.value == 2 %}
+          VE.Bus Fault condition
+        {% elif value_json.value == 3 %}
+          Bulk
+        {% elif value_json.value == 4 %}
+          Absorption
+        {% elif value_json.value == 5 %}
+          Float
+        {% elif value_json.value == 6 %}
+          Storage
+        {% elif value_json.value == 7 %}
+          Equalize
+        {% elif value_json.value == 9 %}
+          Inverting
+        {% elif value_json.value == 10 %}
+          Assisting
+        {% elif value_json.value == 252 %}
+          External control
+        {% elif value_json.value == 256 %}
+          Discharging
+        {% elif value_json.value == 257 %}
+          Sustain
+        {% elif value_json.value == 258 %}
+          Recharging
+        {% else %}
+          Error - No Data
+        {% endif %}
+
+    - name: "ESS State"
+      unique_id: "ess_state"
+      state_topic: "victron/N/c0619ab4fedf/settings/0/Settings/CGwacs/BatteryLife/State"
+      value_template: >
+        {% if value_json.value == 0 %}
+          Unused, BL disabled
+        {% elif value_json.value == 1 %}
+          Restarting
+        {% elif value_json.value == 2 %}
+          Self-consumption
+        {% elif value_json.value == 3 %}
+          Self-consumption
+        {% elif value_json.value == 4 %}
+          Self-consumption
+        {% elif value_json.value == 5 %}
+          Discharge disabled
+        {% elif value_json.value == 6 %}
+          Force Charge
+        {% elif value_json.value == 7 %}
+          Sustain
+        {% elif value_json.value == 8 %}
+          Low Soc Recharge
+        {% elif value_json.value == 9 %}
+          Keep Batteries Charge
+        {% elif value_json.value == 10 %}
+          BL Disabled
+        {% elif value_json.value == 11 %}
+          BL Disabled (Low SoC)
+        {% elif value_json.value == 12 %}
+          BL Disabled (Low SoC Recharge)
+        {% else %}
+          Error - No Data
+        {% endif %}
+
+  # --- Battery Time ---
+    - name: "Battery Remaining"
+      unique_id: "battery_remaining"
+      icon: mdi:timer-sand
+      state_topic: "victron/N/c0619ab4fedf/system/0/Dc/Battery/TimeToGo"
+      value_template: >
+        {% set battery_load = states('sensor.battery_load') | int(0) %}
+
+        {% if value_json.value is none or value_json.value is not defined %}
+          ∞
+        {% elif battery_load > 0 %}
+          ∞
+        {% else %}
+          {% set seconds = value_json.value | int(0) %}
+          {% set days = (seconds / 86400) | int %}
+          {% set hours = ((seconds % 86400) / 3600) | int %}
+          {% set minutes = ((seconds % 3600) / 60) | int %}
+
+          {% if days >= 2 %}
+            {{days}} Days
+          {% elif days == 1 %}
+            {{days}} Day
+          {% elif hours > 0 %}
+            {{hours}} Hours
+          {% elif minutes > 0 %}
+            {{minutes}} Minutes
+          {% else %}
+            < 1 Minute
+          {% endif %}
+        {% endif %}
+
+  # --- Battery History ---
+    - name: "Battery ChargedHistory"
+      unique_id: "shunt_battery_chargedhistory"
+      unit_of_measurement: "kWh"
+      state_topic: "victron/N/c0619ab4fedf/battery/288/History/ChargedEnergy"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      device_class: "energy"
+      state_class: "total_increasing"
+
+    - name: "Battery DischargedHistory"
+      unique_id: "shunt_battery_dischargedhistory"
+      unit_of_measurement: "kWh"
+      state_topic: "victron/N/c0619ab4fedf/battery/288/History/DischargedEnergy"
+      value_template: "{{ value_json.value | float | round(2) }}"
+      device_class: "energy"
+      state_class: "total_increasing"
+
+  # --- VE.Bus ---
+    - name: "VE.Bus State"
+      unique_id: "vebus_state"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/State"
+      value_template: >
+        {% if value_json.value == 0 %}
+          Off
+        {% elif value_json.value == 1 %}
+          Low Power
+        {% elif value_json.value == 2 %}
+          Fault
+        {% elif value_json.value == 3 %}
+          Bulk
+        {% elif value_json.value == 4 %}
+          Absorption
+        {% elif value_json.value == 5 %}
+          Float
+        {% elif value_json.value == 6 %}
+          Storage
+        {% elif value_json.value == 7 %}
+          Equalize
+        {% elif value_json.value == 8 %}
+          Passthru
+        {% elif value_json.value == 9 %}
+          Inverting
+        {% elif value_json.value == 10 %}
+          Power assist
+        {% elif value_json.value == 11 %}
+          Power supply
+        {% elif value_json.value == 252 %}
+          External control
+        {% else %}
+          Error - No Data
+        {% endif %}
+
+  # --- Alarms ---
+    - name: "Alarm Low Battery"
+      unique_id: "alarm_low_battery"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Alarms/LowBattery"
+      value_template: >
+        {% if value_json.value == 0 %}
+          OK
+        {% elif value_json.value == 1 %}
+          Warning
+        {% elif value_json.value == 2 %}
+          Alarm
+        {% else %}
+          Unknown
+        {% endif %}
+      icon: "mdi:battery-alert"
+
+    - name: "Alarm High Voltage"
+      unique_id: "alarm_high_voltage"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Alarms/HighDcVoltage"
+      value_template: >
+        {% if value_json.value == 0 %}
+          OK
+        {% elif value_json.value == 1 %}
+          Warning
+        {% elif value_json.value == 2 %}
+          Alarm
+        {% else %}
+          Unknown
+        {% endif %}
+      icon: "mdi:flash-alert"
+
+    - name: "Alarm Overload"
+      unique_id: "alarm_overload"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Alarms/Overload"
+      value_template: >
+        {% if value_json.value == 0 %}
+          OK
+        {% elif value_json.value == 1 %}
+          Warning
+        {% elif value_json.value == 2 %}
+          Alarm
+        {% else %}
+          Unknown
+        {% endif %}
+      icon: "mdi:alert-octagon"
+
+    - name: "Alarm High Temperature"
+      unique_id: "alarm_high_temperature"
+      state_topic: "victron/N/c0619ab4fedf/vebus/276/Alarms/HighTemperature"
+      value_template: >
+        {% if value_json.value == 0 %}
+          OK
+        {% elif value_json.value == 1 %}
+          Warning
+        {% elif value_json.value == 2 %}
+          Alarm
+        {% else %}
+          Unknown
+        {% endif %}
+      icon: "mdi:thermometer-alert"
+
+  # --- System Info ---
+    - name: "Victron Firmware Version"
+      unique_id: "victron_firmware_version"
+      state_topic: "victron/N/c0619ab4fedf/platform/0/Firmware/Installed/Version"
+      value_template: "{{ value_json.value }}"
+      icon: "mdi:information-outline"
