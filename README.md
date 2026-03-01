@@ -2,7 +2,7 @@
 
 ![Dashboard Screenshot](ha-victron-dashboard.jpg)
 
-MQTT sensor configuration for **Victron Cerbo GX** devices with full **split-phase (L1/L2)** support, plus a ready-to-use Home Assistant dashboard with an energy flow diagram.
+MQTT sensor configuration for **Victron Cerbo GX** devices with full **split-phase (L1/L2)** support, plus a ready-to-use Home Assistant ESS dashboard with an energy flow diagram.
 
 ## What's Included
 
@@ -21,16 +21,17 @@ All sensors use the `{"value": ...}` JSON payload format published by Venus OS o
 | **Alarms** | Low Battery, High DC Voltage, Overload, High Temperature |
 | **System Info** | Firmware Version |
 
-### `home-assistant-dashboard.yaml` — Dashboard
+### `home-assistant-dashboard.yaml` — ESS Dashboard
 
-A sections-based dashboard with:
+A standalone ESS dashboard (sections layout) with:
 
 - **Energy flow diagram** (`custom:system-flow-card`) showing grid, solar, battery, and consumption with L1/L2 detail
-- **AC Energy section** — grid power, voltage, frequency, consumption, and energy counters per phase
-- **Battery section** — SoC, voltage, current, temperature, cell stats, cycles, and runtime
+- **AC Energy section** — grid power, voltage, frequency, consumption, energy counters per phase, and status indicators for Solar/Battery/Grid
+- **Battery section** — SoC (shunt + Weco), voltage, current, temperature, cell stats, cycles, runtime, and DC system power
 - **Solar section** — MPPT state, PV power/voltage/current, today and yesterday generation
-- **Alarms section** — all VE.Bus alarm sensors
+- **Alarms section** — conditional cards that only appear when an alarm is active (Low Battery, High Voltage, Overload, High Temperature)
 - **System Info section** — VE.Bus state, firmware version, total charged/discharged energy
+- **Live Trends section** — collapsible charts (via `custom:expander-card`) with solar vs battery, grid L1/L2, battery SoC, and a daily overview graph
 
 ## Requirements
 
@@ -40,6 +41,9 @@ A sections-based dashboard with:
 - **HACS custom cards** (for the dashboard):
   - [custom:button-card](https://github.com/custom-cards/button-card)
   - [custom:system-flow-card](https://github.com/nicufarmache/system-flow-card)
+  - [custom:mini-graph-card](https://github.com/kalkih/mini-graph-card)
+  - [custom:apexcharts-card](https://github.com/RomRider/apexcharts-card)
+  - [custom:expander-card](https://github.com/Alia5/lovelace-expander-card)
 
 ## Installation
 
@@ -83,7 +87,7 @@ homeassistant:
 
 A full restart is required (not just a YAML reload) for packages to take effect.
 
-### 5. Import the Dashboard (optional)
+### 5. Import the ESS Dashboard
 
 In Home Assistant:
 
@@ -94,7 +98,7 @@ In Home Assistant:
 5. Paste the contents of `home-assistant-dashboard.yaml`
 6. Save
 
-> **Note:** The dashboard references `person.*` entities and other devices specific to the original setup. You'll need to update or remove those sections to match your own Home Assistant configuration.
+The dashboard is a self-contained ESS view — no personal entities or unrelated views included.
 
 ## Enabling MQTT on Venus OS
 
