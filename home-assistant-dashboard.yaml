@@ -284,15 +284,14 @@ views:
                 fill: sensor.shunt_state_of_charge
                 position: left
                 color: '#3FF628'
-              - value: sensor.day_generation
+              - value: sensor.pv_power
                 icon: mdi:solar-power-variant
                 extra:
-                  main: sensor.pv_power
+                  main: sensor.day_generation
                   left: sensor.pv_voltage
                   right: sensor.pv_current
                 position: top
                 color: '#F6DF28'
-                fill: sensor.day_generation
               - value: sensor.ac_consumption_l1
                 icon: mdi:power-plug
                 position: right
@@ -302,6 +301,148 @@ views:
                   main: sensor.ac_consumption_l2
                   left: sensor.inverter_output_load_on_l1
                   right: sensor.inverter_output_load_on_l2
+      - type: grid
+        cards:
+          - type: heading
+            heading: Live Trends
+            heading_style: title
+            icon: mdi:chart-line
+          - type: custom:mini-graph-card
+            name: Solar Power
+            entities:
+              - entity: sensor.pv_power
+                color: '#F6DF28'
+            hours_to_show: 24
+            points_per_hour: 4
+            line_width: 2
+            font_size: 75
+            show:
+              labels: true
+              points: false
+              legend: false
+          - type: custom:mini-graph-card
+            name: Grid Load
+            entities:
+              - entity: sensor.grid_load_on_l1
+                name: L1
+                color: '#B62D00'
+              - entity: sensor.grid_load_on_l2
+                name: L2
+                color: '#FF6B35'
+            hours_to_show: 24
+            points_per_hour: 4
+            line_width: 2
+            font_size: 75
+            show:
+              labels: true
+              points: false
+              legend: true
+          - type: custom:mini-graph-card
+            name: Battery SoC
+            entities:
+              - entity: sensor.shunt_state_of_charge
+                color: '#3FF628'
+            hours_to_show: 24
+            points_per_hour: 4
+            line_width: 2
+            font_size: 75
+            lower_bound: 0
+            upper_bound: 100
+            show:
+              labels: true
+              points: false
+              legend: false
+          - type: custom:mini-graph-card
+            name: Battery Power
+            entities:
+              - entity: sensor.battery_power
+                color: '#3FF628'
+            hours_to_show: 24
+            points_per_hour: 4
+            line_width: 2
+            font_size: 75
+            show:
+              labels: true
+              points: false
+              legend: false
+          - type: custom:mini-graph-card
+            name: AC Consumption
+            entities:
+              - entity: sensor.ac_consumption_l1
+                name: L1
+                color: '#0089b6'
+              - entity: sensor.ac_consumption_l2
+                name: L2
+                color: '#00C2FF'
+            hours_to_show: 24
+            points_per_hour: 4
+            line_width: 2
+            font_size: 75
+            show:
+              labels: true
+              points: false
+              legend: true
+          - type: custom:mini-graph-card
+            name: Grid Voltage
+            entities:
+              - entity: sensor.grid_voltage_l1
+                name: L1
+                color: '#9C27B0'
+              - entity: sensor.grid_voltage_l2
+                name: L2
+                color: '#CE93D8'
+            hours_to_show: 24
+            points_per_hour: 4
+            line_width: 2
+            font_size: 75
+            show:
+              labels: true
+              points: false
+              legend: true
+          - type: custom:apexcharts-card
+            header:
+              title: Daily Energy Overview
+              show: true
+            graph_span: 24h
+            span:
+              start: day
+            chart_type: area
+            series:
+              - entity: sensor.pv_power
+                name: Solar
+                color: '#F6DF28'
+                type: area
+                stroke_width: 2
+                opacity: 0.3
+                group_by:
+                  func: avg
+                  duration: 15min
+              - entity: sensor.ac_consumption_l1
+                name: Consumption L1
+                color: '#0089b6'
+                type: area
+                stroke_width: 2
+                opacity: 0.2
+                group_by:
+                  func: avg
+                  duration: 15min
+              - entity: sensor.ac_consumption_l2
+                name: Consumption L2
+                color: '#00C2FF'
+                type: area
+                stroke_width: 2
+                opacity: 0.2
+                group_by:
+                  func: avg
+                  duration: 15min
+              - entity: sensor.grid_load_on_l1
+                name: Grid L1
+                color: '#B62D00'
+                type: line
+                stroke_width: 1
+                group_by:
+                  func: avg
+                  duration: 15min
       - type: grid
         cards:
           - type: heading
@@ -461,30 +602,57 @@ views:
             heading: Alarms
             heading_style: title
             icon: mdi:alert
-          - type: tile
-            entity: sensor.alarm_low_battery
-            features_position: bottom
-            vertical: false
-            name: Low Battery
-            color: red
-          - type: tile
-            entity: sensor.alarm_high_voltage
-            features_position: bottom
-            vertical: false
-            name: High Voltage
-            color: red
-          - type: tile
-            entity: sensor.alarm_overload
-            features_position: bottom
-            vertical: false
-            name: Overload
-            color: red
-          - type: tile
-            entity: sensor.alarm_high_temperature
-            features_position: bottom
-            vertical: false
-            name: High Temp
-            color: red
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: sensor.alarm_low_battery
+                state_not: OK
+            card:
+              type: tile
+              entity: sensor.alarm_low_battery
+              name: Low Battery
+              color: red
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: sensor.alarm_high_voltage
+                state_not: OK
+            card:
+              type: tile
+              entity: sensor.alarm_high_voltage
+              name: High Voltage
+              color: red
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: sensor.alarm_overload
+                state_not: OK
+            card:
+              type: tile
+              entity: sensor.alarm_overload
+              name: Overload
+              color: red
+          - type: conditional
+            conditions:
+              - condition: state
+                entity: sensor.alarm_high_temperature
+                state_not: OK
+            card:
+              type: tile
+              entity: sensor.alarm_high_temperature
+              name: High Temp
+              color: red
+          - type: markdown
+            content: >
+              {% set alarms = [
+                states('sensor.alarm_low_battery'),
+                states('sensor.alarm_high_voltage'),
+                states('sensor.alarm_overload'),
+                states('sensor.alarm_high_temperature')
+              ] %}
+              {% if alarms | select('in', ['Warning', 'Alarm']) | list | length == 0 %}
+              **All systems OK** — No active alarms
+              {% endif %}
       - type: grid
         cards:
           - type: heading
