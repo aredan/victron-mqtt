@@ -29,6 +29,8 @@ mqtt:
       unique_id: "pv_array_voltage"
       state_topic: "victron/N/c0619ab4fedf/solarcharger/0/Pv/V"
       unit_of_measurement: "V"
+      device_class: voltage
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:flash"
 
@@ -36,6 +38,8 @@ mqtt:
       unique_id: "pv_array_power"
       state_topic: "victron/N/c0619ab4fedf/solarcharger/0/Yield/Power"
       unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:power-plug"
 
@@ -43,6 +47,8 @@ mqtt:
       unique_id: "pv_array_current"
       state_topic: "victron/N/c0619ab4fedf/solarcharger/0/Dc/0/Current"
       unit_of_measurement: "A"
+      device_class: current
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:current-dc"
 
@@ -69,6 +75,8 @@ mqtt:
       unique_id: "shunt_soc"
       state_topic: "victron/N/c0619ab4fedf/battery/288/Soc"
       unit_of_measurement: "%"
+      device_class: battery
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:battery"
 
@@ -76,6 +84,8 @@ mqtt:
       unique_id: "shunt_current"
       state_topic: "victron/N/c0619ab4fedf/battery/288/Dc/0/Current"
       unit_of_measurement: "A"
+      device_class: current
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:current-dc"
 
@@ -83,6 +93,8 @@ mqtt:
       unique_id: "shunt_voltage"
       state_topic: "victron/N/c0619ab4fedf/battery/288/Dc/0/Voltage"
       unit_of_measurement: "V"
+      device_class: voltage
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:vector-line"
 
@@ -91,6 +103,8 @@ mqtt:
       unique_id: "weco_soc"
       state_topic: "victron/N/c0619ab4fedf/battery/512/Soc"
       unit_of_measurement: "%"
+      device_class: battery
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:battery"
 
@@ -98,6 +112,8 @@ mqtt:
       unique_id: "weco_current"
       state_topic: "victron/N/c0619ab4fedf/battery/512/Dc/0/Current"
       unit_of_measurement: "A"
+      device_class: current
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:current-dc"
 
@@ -105,6 +121,8 @@ mqtt:
       unique_id: "weco_voltage"
       state_topic: "victron/N/c0619ab4fedf/battery/512/Dc/0/Voltage"
       unit_of_measurement: "V"
+      device_class: voltage
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:flash"
 
@@ -112,6 +130,8 @@ mqtt:
       unique_id: "weco_temperature"
       state_topic: "victron/N/c0619ab4fedf/battery/512/Dc/0/Temperature"
       unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
       value_template: "{{ value_json.value }}"
       icon: "mdi:thermometer"
 
@@ -119,12 +139,14 @@ mqtt:
       unique_id: "weco_soh"
       state_topic: "victron/N/c0619ab4fedf/battery/512/Soh"
       unit_of_measurement: "%"
+      state_class: measurement
       value_template: "{{ value_json.value }}"
       icon: "mdi:heart-pulse"
 
     - name: "Battery Cycles"
       unique_id: "battery_cycles"
       state_topic: "victron/N/c0619ab4fedf/battery/512/History/ChargeCycles"
+      state_class: total_increasing
       value_template: "{{ value_json.value | int }}"
       icon: "mdi:battery-sync"
 
@@ -132,6 +154,8 @@ mqtt:
       unique_id: "battery_min_cell_temp"
       state_topic: "victron/N/c0619ab4fedf/battery/512/System/MinCellTemperature"
       unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(1) }}"
       icon: "mdi:thermometer-chevron-down"
 
@@ -139,6 +163,8 @@ mqtt:
       unique_id: "battery_max_cell_temp"
       state_topic: "victron/N/c0619ab4fedf/battery/512/System/MaxCellTemperature"
       unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(1) }}"
       icon: "mdi:thermometer-chevron-up"
 
@@ -152,6 +178,8 @@ mqtt:
       unique_id: "weco_cell_low_voltage"
       state_topic: "victron/N/c0619ab4fedf/battery/512/System/MinCellVoltage"
       unit_of_measurement: "V"
+      device_class: voltage
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:chevron-double-down"
 
@@ -159,6 +187,8 @@ mqtt:
       unique_id: "weco_cell_high_voltage"
       state_topic: "victron/N/c0619ab4fedf/battery/512/System/MaxCellVoltage"
       unit_of_measurement: "V"
+      device_class: voltage
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:chevron-double-up"
 
@@ -181,6 +211,7 @@ mqtt:
     - name: "Battery Load"
       unique_id: "battery_load"
       device_class: power
+      state_class: measurement
       state_topic: "victron/N/c0619ab4fedf/system/0/Batteries"
       value_template: '{{ value_json.value[0].power|float(0)|round(0) }}'
       unit_of_measurement: "W"
@@ -191,6 +222,7 @@ mqtt:
       state_topic: "victron/N/c0619ab4fedf/system/0/Dc/Battery/Power"
       unit_of_measurement: "W"
       device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(0) }}"
       icon: "mdi:battery-charging"
 
@@ -199,6 +231,7 @@ mqtt:
       state_topic: "victron/N/c0619ab4fedf/system/0/Dc/System/Power"
       unit_of_measurement: "W"
       device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value | float(0) | round(0) }}"
       icon: "mdi:lightning-bolt"
 
@@ -207,6 +240,8 @@ mqtt:
       unique_id: "grid_load_l1"
       state_topic: "victron/N/c0619ab4fedf/system/0/Ac/Grid/L1/Power"
       unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value }}"
       icon: "mdi:transmission-tower"
 
@@ -214,6 +249,8 @@ mqtt:
       unique_id: "grid_load_l2"
       state_topic: "victron/N/c0619ab4fedf/system/0/Ac/Grid/L2/Power"
       unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value }}"
       icon: "mdi:transmission-tower"
 
@@ -221,6 +258,8 @@ mqtt:
       unique_id: "grid_voltage_l1"
       state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/L1/V"
       unit_of_measurement: "V"
+      device_class: voltage
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(1) }}"
       icon: "mdi:flash"
 
@@ -228,6 +267,8 @@ mqtt:
       unique_id: "grid_voltage_l2"
       state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/L2/V"
       unit_of_measurement: "V"
+      device_class: voltage
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(1) }}"
       icon: "mdi:flash"
 
@@ -236,6 +277,7 @@ mqtt:
       state_topic: "victron/N/c0619ab4fedf/system/0/Ac/Consumption/L1/Power"
       unit_of_measurement: "W"
       device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value | float(0) | round(0) }}"
       icon: "mdi:home-lightning-bolt"
 
@@ -244,6 +286,7 @@ mqtt:
       state_topic: "victron/N/c0619ab4fedf/system/0/Ac/Consumption/L2/Power"
       unit_of_measurement: "W"
       device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value | float(0) | round(0) }}"
       icon: "mdi:home-lightning-bolt"
 
@@ -269,6 +312,8 @@ mqtt:
       unique_id: "inverter_output_l1"
       state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/Out/L1/P"
       unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value }}"
       icon: "mdi:power-plug"
 
@@ -276,6 +321,8 @@ mqtt:
       unique_id: "inverter_output_l2"
       state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/Out/L2/P"
       unit_of_measurement: "W"
+      device_class: power
+      state_class: measurement
       value_template: "{{ value_json.value }}"
       icon: "mdi:power-plug"
 
@@ -283,6 +330,7 @@ mqtt:
       unique_id: "ess_battery_set_limit"
       state_topic: "victron/N/c0619ab4fedf/system/0/Control/ActiveSocLimit"
       unit_of_measurement: "%"
+      state_class: measurement
       value_template: "{{ value_json.value }}"
       icon: "mdi:tune-vertical"
 
@@ -290,6 +338,8 @@ mqtt:
       unique_id: "grid_current_limit"
       state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/CurrentLimit"
       unit_of_measurement: "A"
+      device_class: current
+      state_class: measurement
       value_template: "{{ value_json.value }}"
       icon: "mdi:speedometer"
 
@@ -297,6 +347,8 @@ mqtt:
       unique_id: "grid_frequency_l1"
       state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/L1/F"
       unit_of_measurement: "Hz"
+      device_class: frequency
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:omega"
 
@@ -304,6 +356,8 @@ mqtt:
       unique_id: "grid_frequency_l2"
       state_topic: "victron/N/c0619ab4fedf/vebus/276/Ac/ActiveIn/L2/F"
       unit_of_measurement: "Hz"
+      device_class: frequency
+      state_class: measurement
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:omega"
 
