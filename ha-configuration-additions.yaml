@@ -1,0 +1,25 @@
+# ============================================================
+# Add these blocks to your Home Assistant configuration.yaml
+# ============================================================
+
+# --- Utility Meter ---
+# Tracks daily grid energy export, resets at midnight
+utility_meter:
+  grid_energy_out_daily:
+    source: sensor.grid_energy_to
+    cycle: daily
+
+# --- Template Sensor ---
+# Captures yesterday's total grid export at midnight before the daily meter resets
+template:
+  - trigger:
+      - trigger: time
+        at: "00:00:00"
+    sensor:
+      - name: "Grid Energy Yesterday"
+        unique_id: "grid_energy_yesterday"
+        unit_of_measurement: "kWh"
+        device_class: energy
+        state_class: total
+        icon: mdi:transmission-tower-export
+        state: "{{ states('sensor.grid_energy_out_daily') | float(0) | round(2) }}"

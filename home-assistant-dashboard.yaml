@@ -147,6 +147,14 @@ views:
               columns: 6
               rows: 1
           - type: tile
+            entity: sensor.grid_energy_yesterday
+            features_position: bottom
+            vertical: false
+            name: Grid Energy Yesterday
+            grid_options:
+              columns: 6
+              rows: 1
+          - type: tile
             entity: sensor.inverter_state
             features_position: bottom
             vertical: false
