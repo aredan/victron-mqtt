@@ -93,7 +93,7 @@ sections:
             state:
               - value: External control
                 color: rgb(255, 255, 0)
-              - value: 'Off'
+              - value: "Off"
                 color: rgb(169, 169, 169)
               - value: LIMITED
                 color: rgb(0, 0, 255)
@@ -146,14 +146,6 @@ sections:
           columns: 6
           rows: 1
       - type: tile
-        entity: sensor.grid_energy_yesterday
-        features_position: bottom
-        vertical: false
-        name: Grid Energy Yesterday
-        grid_options:
-          columns: 6
-          rows: 1
-      - type: tile
         entity: sensor.inverter_state
         features_position: bottom
         vertical: false
@@ -162,6 +154,22 @@ sections:
           rows: 1
         icon: mdi:generator-stationary
         color: green
+      - type: tile
+        entity: sensor.grid_energy_yesterday
+        features_position: bottom
+        vertical: false
+        name: Grid Energy Yesterday
+        grid_options:
+          columns: 6
+          rows: 1
+      - type: tile
+        entity: sensor.grid_energy_in_daily
+        features_position: bottom
+        vertical: false
+        name: Grid Energy Today
+        grid_options:
+          columns: 6
+          rows: 1
       - type: custom:system-flow-card
         speed: 3
         fadeIdylElements: true
@@ -170,16 +178,15 @@ sections:
           icon: mdi:home-battery-outline
           extra:
             main: sensor.inverter_state
-          color: '#0089b6'
+          color: "#0089b6"
         elements:
-          - value: sensor.grid_load_on_l1
+          - value: sensor.grid_load_total_2
             icon: mdi:transmission-tower-import
             position: left
-            color: '#B62D00'
+            color: "#B62D00"
             extra:
-              main: sensor.grid_load_on_l2
-              left: sensor.grid_voltage_l1
-              right: sensor.grid_voltage_l2
+              left: sensor.grid_load_on_l1
+              right: sensor.grid_load_on_l2
           - value: sensor.battery_power
             invert: true
             icon: mdi:battery
@@ -189,7 +196,7 @@ sections:
               right: sensor.battery_current
             fill: sensor.shunt_state_of_charge
             position: left
-            color: '#3FF628'
+            color: "#3FF628"
           - value: sensor.pv_power
             icon: mdi:solar-power-variant
             extra:
@@ -197,16 +204,15 @@ sections:
               left: sensor.pv_voltage
               right: sensor.pv_current
             position: top
-            color: '#F6DF28'
-          - value: sensor.ac_consumption_l1
+            color: "#F6DF28"
+          - value: sensor.ac_consumption_total
             icon: mdi:power-plug
             position: right
-            color: '#B62D00'
+            color: "#B62D00"
             invert: true
             extra:
-              main: sensor.ac_consumption_l2
-              left: sensor.inverter_output_load_on_l1
-              right: sensor.inverter_output_load_on_l2
+              left: sensor.ac_consumption_l1
+              right: sensor.ac_consumption_l2
   - type: grid
     cards:
       - type: heading
@@ -258,6 +264,11 @@ sections:
         features_position: bottom
         vertical: false
         name: Battery Temp
+      - type: tile
+        entity: sensor.battery_bank_temperature
+        features_position: bottom
+        vertical: false
+        name: Bank Temp (Cerbo)
       - type: tile
         entity: sensor.battery_min_cell_temperature
         features_position: bottom
@@ -413,10 +424,8 @@ sections:
             states('sensor.alarm_high_voltage'),
             states('sensor.alarm_overload'),
             states('sensor.alarm_high_temperature')
-          ] %}
-          {% if alarms | select('in', ['Warning', 'Alarm']) | list | length == 0 %}
-          **All systems OK** — No active alarms
-          {% endif %}
+          ] %} {% if alarms | select('in', ['Warning', 'Alarm']) | list | length
+          == 0 %} **All systems OK** — No active alarms {% endif %}
   - type: grid
     cards:
       - type: heading
@@ -459,10 +468,10 @@ sections:
             entities:
               - entity: sensor.pv_power
                 name: Solar
-                color: '#F6DF28'
+                color: "#F6DF28"
               - entity: sensor.battery_power
                 name: Battery
-                color: '#3FF628'
+                color: "#3FF628"
             name: Solar vs Battery (1h)
             hours_to_show: 1
             points_per_hour: 30
@@ -476,10 +485,10 @@ sections:
             entities:
               - entity: sensor.grid_load_on_l1
                 name: Grid L1
-                color: '#B62D00'
+                color: "#B62D00"
               - entity: sensor.grid_load_on_l2
                 name: Grid L2
-                color: '#FF6B35'
+                color: "#FF6B35"
             name: Grid Load L1/L2 (1h)
             hours_to_show: 1
             points_per_hour: 30
@@ -493,7 +502,7 @@ sections:
             entities:
               - entity: sensor.shunt_state_of_charge
                 name: SoC
-                color: '#3FF628'
+                color: "#3FF628"
             name: Battery SoC (24h)
             hours_to_show: 24
             points_per_hour: 6
@@ -522,7 +531,7 @@ sections:
               - entity: sensor.pv_power
                 name: Solar
                 type: area
-                color: '#F6DF28'
+                color: "#F6DF28"
                 opacity: 0.3
                 stroke_width: 2
                 group_by:
@@ -531,7 +540,7 @@ sections:
               - entity: sensor.battery_power
                 name: Battery
                 type: line
-                color: '#3FF628'
+                color: "#3FF628"
                 stroke_width: 2
                 group_by:
                   func: avg
@@ -539,7 +548,7 @@ sections:
               - entity: sensor.ac_consumption_l1
                 name: Load L1
                 type: line
-                color: '#B62D00'
+                color: "#B62D00"
                 stroke_width: 1
                 group_by:
                   func: avg
@@ -548,3 +557,4 @@ max_columns: 2
 header:
   layout: responsive
   badges_position: bottom
+

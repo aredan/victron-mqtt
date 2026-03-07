@@ -43,15 +43,6 @@ mqtt:
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:power-plug"
 
-    - name: "PV Current"
-      unique_id: "pv_array_current"
-      state_topic: "victron/N/c0619ab4fedf/solarcharger/0/Dc/0/Current"
-      unit_of_measurement: "A"
-      device_class: current
-      state_class: measurement
-      value_template: "{{ value_json.value | float | round(2) }}"
-      icon: "mdi:current-dc"
-
     - name: "Day Generation"
       unique_id: "pv_day_generation"
       state_topic: "victron/N/c0619ab4fedf/solarcharger/0/History/Daily/0/Yield"
@@ -95,6 +86,7 @@ mqtt:
       unit_of_measurement: "V"
       device_class: voltage
       state_class: measurement
+      suggested_display_precision: 2
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:vector-line"
 
@@ -123,6 +115,7 @@ mqtt:
       unit_of_measurement: "V"
       device_class: voltage
       state_class: measurement
+      suggested_display_precision: 2
       value_template: "{{ value_json.value | float | round(2) }}"
       icon: "mdi:flash"
 
@@ -168,6 +161,15 @@ mqtt:
       value_template: "{{ value_json.value | float | round(1) }}"
       icon: "mdi:thermometer-chevron-up"
 
+    - name: "Battery Bank Temperature"
+      unique_id: "cerbo_temp_sensor"
+      state_topic: "victron/N/c0619ab4fedf/temperature/25/Temperature"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state_class: measurement
+      value_template: "{{ value_json.value | float | round(1) }}"
+      icon: "mdi:thermometer"
+
     - name: "Batteries Online"
       unique_id: "batteries_online"
       state_topic: "victron/N/c0619ab4fedf/battery/512/System/NrOfModulesOnline"
@@ -180,7 +182,8 @@ mqtt:
       unit_of_measurement: "V"
       device_class: voltage
       state_class: measurement
-      value_template: "{{ value_json.value | float | round(2) }}"
+      suggested_display_precision: 3
+      value_template: "{{ value_json.value | float | round(3) }}"
       icon: "mdi:chevron-double-down"
 
     - name: "Cell High Voltage"
@@ -189,7 +192,8 @@ mqtt:
       unit_of_measurement: "V"
       device_class: voltage
       state_class: measurement
-      value_template: "{{ value_json.value | float | round(2) }}"
+      suggested_display_precision: 3
+      value_template: "{{ value_json.value | float | round(3) }}"
       icon: "mdi:chevron-double-up"
 
     - name: "Victron System Battery State"

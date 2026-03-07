@@ -3,14 +3,14 @@
 # ============================================================
 
 # --- Utility Meter ---
-# Tracks daily grid energy export, resets at midnight
+# Tracks daily grid energy import, resets at midnight
 utility_meter:
-  grid_energy_out_daily:
-    source: sensor.grid_energy_to
+  grid_energy_in_daily:
+    source: sensor.grid_energy_from
     cycle: daily
 
 # --- Template Sensor ---
-# Captures yesterday's total grid export at midnight before the daily meter resets
+# Captures yesterday's total grid import at midnight before the daily meter resets
 template:
   - trigger:
       - trigger: time
@@ -21,5 +21,22 @@ template:
         unit_of_measurement: "kWh"
         device_class: energy
         state_class: total
-        icon: mdi:transmission-tower-export
-        state: "{{ states('sensor.grid_energy_out_daily') | float(0) | round(2) }}"
+        icon: mdi:transmission-tower-import
+        state: "{{ states('sensor.grid_energy_in_daily') | float(0) | round(2) }}"
+
+  - sensor:
+      - name: "AC Consumption Total"
+        unique_id: "ac_consumption_total"
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+        icon: mdi:home-lightning-bolt
+        state: "{{ (states('sensor.ac_consumption_l1') | float(0) + states('sensor.ac_consumption_l2') | float(0)) | round(0) }}"
+
+      - name: "Grid Load Total"
+        unique_id: "grid_load_total"
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+        icon: mdi:transmission-tower
+        state: "{{ (states('sensor.grid_load_on_l1') | float(0) + states('sensor.grid_load_on_l2') | float(0)) | round(0) }}"
