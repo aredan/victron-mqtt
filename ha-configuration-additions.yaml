@@ -8,13 +8,18 @@ utility_meter:
   grid_energy_in_daily:
     source: sensor.grid_energy_from
     cycle: daily
+  grid_energy_in_monthly:
+    source: sensor.grid_energy_from
+    cycle: monthly
+    offset:
+      days: 14
 
 # --- Template Sensor ---
 # Captures yesterday's total grid import at midnight before the daily meter resets
 template:
   - trigger:
       - trigger: time
-        at: "00:00:00"
+        at: "23:59:00"
     sensor:
       - name: "Grid Energy Yesterday"
         unique_id: "grid_energy_yesterday"
@@ -32,6 +37,47 @@ template:
         state_class: measurement
         icon: mdi:home-lightning-bolt
         state: "{{ (states('sensor.ac_consumption_l1') | float(0) + states('sensor.ac_consumption_l2') | float(0)) | round(0) }}"
+
+      - name: "Energy Price"
+        unique_id: "energy_price"
+        unit_of_measurement: "RD$/kWh"
+        icon: mdi:currency-usd
+        state: >
+          {% set usage = states('sensor.grid_energy_in_monthly') | float(0) %}
+          {% if usage <= 200 %}
+            {{ 6.05 }}
+          {% elif usage <= 300 %}
+            {{ 8.59 }}
+          {% elif usage <= 700 %}
+            {{ 12.89 }}
+          {% else %}
+            {{ 13.09 }}
+          {% endif %}
+
+      - name: "Grid Cost Monthly"
+        unique_id: "grid_cost_monthly"
+        unit_of_measurement: "RD$"
+        icon: mdi:cash-multiple
+        state: >
+          {% set usage = states('sensor.grid_energy_in_monthly') | float(0) %}
+          {% if usage <= 200 %}
+            {{ (usage * 6.05) | round(2) }}
+          {% elif usage <= 300 %}
+            {{ (200 * 6.05 + (usage - 200) * 8.59) | round(2) }}
+          {% elif usage <= 700 %}
+            {{ (200 * 6.05 + 100 * 8.59 + (usage - 300) * 12.89) | round(2) }}
+          {% else %}
+            {{ (200 * 6.05 + 100 * 8.59 + 400 * 12.89 + (usage - 700) * 13.09) | round(2) }}
+          {% endif %}
+
+      - name: "Grid Cost Today"
+        unique_id: "grid_cost_today"
+        unit_of_measurement: "RD$"
+        icon: mdi:cash
+        state: >
+          {% set daily = states('sensor.grid_energy_in_daily') | float(0) %}
+          {% set rate = states('sensor.energy_price') | float(6.05) %}
+          {{ (daily * rate) | round(2) }}
 
       - name: "Grid Load Total"
         unique_id: "grid_load_total"

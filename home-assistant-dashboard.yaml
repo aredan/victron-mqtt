@@ -170,6 +170,22 @@ sections:
         grid_options:
           columns: 6
           rows: 1
+      - type: tile
+        entity: sensor.grid_cost_today
+        features_position: bottom
+        vertical: false
+        name: Grid Cost Today
+        grid_options:
+          columns: 6
+          rows: 1
+      - type: tile
+        entity: sensor.grid_cost_monthly
+        features_position: bottom
+        vertical: false
+        name: Grid Cost This Month
+        grid_options:
+          columns: 6
+          rows: 1
       - type: custom:system-flow-card
         speed: 3
         fadeIdylElements: true
